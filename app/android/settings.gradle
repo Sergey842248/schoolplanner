@@ -1,5 +1,18 @@
-include ':app'
 
+import java.io.File
+import java.util.Properties
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven {
+            url (new File(rootProject.projectDir.parentFile, 'packages/flutter_tools/gradle/flutter_gradle_plugin_repository'))
+        }
+    }
+}
+include ':app'
 def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
 
 def plugins = new Properties()
