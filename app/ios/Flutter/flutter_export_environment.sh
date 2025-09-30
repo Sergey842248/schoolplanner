@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/felixweuthen/Weiteres/Flutter/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/felixweuthen/Projekte/schulplaner/app"
+export "FLUTTER_ROOT=/opt/flutter"
+export "FLUTTER_APPLICATION_PATH=/home/parsa/Documents/StudioProjects/schoolplanner/app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
