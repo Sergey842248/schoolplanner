@@ -17,6 +17,7 @@ import com.xla.school.logic.SharedPrefDatabase
 import com.xla.school.models.SchoolTask
 import com.xla.school.models.Settings
 import com.xla.school.views.RemoteViewObject
+import com.xla.school.NotificationID
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -128,4 +129,3 @@ fun updateTaskWidgets(context: Context) {
     context.sendBroadcast(intent)
 
 }
-

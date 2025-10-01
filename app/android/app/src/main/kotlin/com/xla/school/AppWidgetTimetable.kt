@@ -16,6 +16,7 @@ import com.xla.school.logic.DataParser
 import com.xla.school.logic.SharedPrefDatabase
 import com.xla.school.models.*
 import com.xla.school.views.RemoteViewObject
+import com.xla.school.NotificationID
 import java.lang.Exception
 
 
@@ -162,4 +163,3 @@ fun updateTimetableWidgets(context: Context) {
 // since it seems the onUpdate() is only fired on that:
 
 }
-

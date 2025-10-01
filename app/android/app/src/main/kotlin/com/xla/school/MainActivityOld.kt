@@ -1,14 +1,13 @@
 package com.xla.school
 
 import android.content.Context
-import io.flutter.plugin.common.MethodCall
 
 object MainActivityOldKt {
     fun loadPlannerData(context: Context) {
         // TODO: Implement data loading logic
     }
 
-    fun updateWidgetDate(call: MethodCall, context: Context) {
+    fun updateWidgetDate(context: Context) {
         // TODO: Implement widget update logic
     }
 

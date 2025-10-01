@@ -1,143 +1,143 @@
-package com.xla.school;
+package com.xla.school
 
-import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.os.Bundle;
-import androidx.annotation.AttrRes;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.xla.school.logic.DataParser;
-import com.xla.school.models.Course;
-import com.xla.school.models.Lesson;
-import com.xla.school.models.Period;
-import com.xla.school.models.Settings;
+import android.content.Intent
+import android.content.res.TypedArray
+import android.graphics.Color
+import android.os.Bundle
+import androidx.annotation.AttrRes
+import androidx.annotation.NonNull
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.xla.school.logic.DataParser
+import com.xla.school.models.Course
+import com.xla.school.models.Lesson
+import com.xla.school.models.Period
+import com.xla.school.models.Settings
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+class LessonDialogView : AppCompatActivity() {
 
-public class LessonDialogView extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStatusBarDim(true);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStatusBarDim(true)
 
-        setContentView(R.layout.lessondialog_view);
-        findViewById(R.id.touch_outside).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishAndRemoveTask();
-            }
-        });
-        BottomSheetBehavior.from(findViewById(R.id.bottom_sheet))
-                .setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                    @Override
-                    public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                        switch (newState) {
-                            case BottomSheetBehavior.STATE_HIDDEN:
-                                finishAndRemoveTask();
-                                break;
-                            case BottomSheetBehavior.STATE_EXPANDED:
-                                setStatusBarDim(true);
-                                break;
-                            default:
-                                setStatusBarDim(true);
-                                break;
+        setContentView(R.layout.lessondialog_view)
+        findViewById<View>(R.id.touch_outside).setOnClickListener {
+            finishAndRemoveTask()
+        }
+
+        BottomSheetBehavior.from(findViewById<View>(R.id.bottom_sheet))
+            .setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            finishAndRemoveTask()
+                        }
+                        BottomSheetBehavior.STATE_EXPANDED -> {
+                            setStatusBarDim(true)
+                        }
+                        else -> {
+                            setStatusBarDim(true)
                         }
                     }
+                }
 
-                    @Override
-                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                        // no op
+                override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
+                    // no op
+                }
+            })
+
+        val mActionBarToolbar = findViewById<Toolbar>(R.id.my_toolbar)
+        setSupportActionBar(mActionBarToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.baseline_close_black_24)
+
+        val i = intent
+        val lessonid = i.getStringExtra("data_lesson_id")
+        if (lessonid != null) {
+            val lesson = DataParser.getLesson(this, lessonid)
+            if (lesson != null) {
+                val course = DataParser.getCourse(this, lesson.courseid)
+                val period = DataParser.getIndividualPeriod(this, lesson.start, lesson.end)
+
+                supportActionBar?.title = (
+                    MainActivityOldKt.getDaysOfWeek(this)[lesson.day] +
+                        ", " + if (lesson.isMultiLesson()) {
+                        "${lesson.start}. - ${lesson.end}. "
+                    } else {
+                        "${lesson.start}. "
                     }
-                });
+                )
 
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(mActionBarToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_close_black_24);
+                if (course != null) {
+                    findViewById<TextView>(R.id.text_info_course).text = course.name
+                    findViewById<ImageView>(R.id.icon_info_course).setColorFilter(course.getDesignVal())
+                }
 
-        Intent i = getIntent();
-        String lessonid = i.getExtras().getString("data_lesson_id");
-        if(lessonid != null){
+                if (lesson.teacher != null) {
+                    findViewById<TextView>(R.id.text_info_teacher).text = lesson.teacher.name
+                } else {
+                    findViewById<TextView>(R.id.text_info_teacher).setText("-")
+                }
 
-            Lesson lesson = DataParser.INSTANCE.getLesson(this, lessonid);
-            Course course  =DataParser.INSTANCE.getCourse(this, lesson.getCourseid());
-            Period period = DataParser.INSTANCE.getIndividualPeriod(this, lesson.getStart(), lesson.getEnd());
+                if (lesson.location != null) {
+                    findViewById<TextView>(R.id.text_info_place).text = lesson.location.name
+                } else {
+                    findViewById<TextView>(R.id.text_info_place).setText("-")
+                }
 
-            getSupportActionBar().setTitle((
-                    MainActivityOldKt.getDaysOfWeek(this).get(lesson.getDay()) +
-                            ", " + (lesson.isMultiLesson()? String.valueOf(lesson.getStart())+". - "+String.valueOf(lesson.getEnd())+". "
-                            : String.valueOf(lesson.getStart())+". ")
-            ));
-            ((TextView) findViewById(R.id.text_info_course)).setText(course.getName());
-            ((ImageView) findViewById(R.id.icon_info_course)).setColorFilter(course.getDesignVal());
+                val settings = DataParser.getSettings(this)
 
-            if(lesson.getTeacher() != null){
-                ((TextView) findViewById(R.id.text_info_teacher)).setText(lesson.getTeacher().getName());
-            }else{
-                ((TextView) findViewById(R.id.text_info_teacher)).setText("-");
+                if (settings.multiple_weektypes) {
+                    findViewById<RelativeLayout>(R.id.layout_weektype).visibility = View.VISIBLE
+                    findViewById<TextView>(R.id.text_info_weektype).text = MainActivityOldKt.getWeekTypeNames(this)[lesson.weektype]
+                }
+
+                findViewById<TextView>(R.id.text_info_period).text = if (lesson.isMultiLesson()) {
+                    "${lesson.start}. - ${lesson.end}. ${getString(R.string.period)}" +
+                        if (settings.schedule_showlessontime) {
+                            " ${period.start}-${period.end}"
+                        } else {
+                            ""
+                        }
+                } else {
+                    "${lesson.start}. ${getString(R.string.period)}" +
+                        if (settings.schedule_showlessontime) {
+                            " ${period.start}-${period.end}"
+                        } else {
+                            ""
+                        }
+                }
             }
-
-            if(lesson.getLocation() != null){
-                ((TextView) findViewById(R.id.text_info_place)).setText(lesson.getLocation().getName());
-            }else{
-                ((TextView) findViewById(R.id.text_info_place)).setText("-");
-            }
-            Settings settings = DataParser.INSTANCE.getSettings(this);
-
-            if(settings.getMultiple_weektypes()){
-                ((RelativeLayout) findViewById(R.id.layout_weektype)).setVisibility(View.VISIBLE);
-                ((TextView) findViewById(R.id.text_info_weektype)).setText(MainActivityOldKt.getWeekTypeNames(this).get(lesson.getWeektype()));
-            }
-
-            ((TextView) findViewById(R.id.text_info_period)).setText(
-            (lesson.isMultiLesson()? (String.valueOf(lesson.getStart())+". - "+String.valueOf(lesson.getEnd())+". "+getString(R.string.period)
-                    +(settings.getSchedule_showlessontime()?
-                    (
-                            " "+period.getStart()+"-"+period.getEnd()
-                    ):
-                    "")
-            )
-                    : String.valueOf(lesson.getStart())+". "+getString(R.string.period)
-                    +(settings.getSchedule_showlessontime()?
-                    (
-                     " "+period.getStart()+"-"+period.getEnd()
-                            ):
-                    ""
-            )
-            ));
-
         }
     }
 
-    private void setStatusBarDim(boolean dim) {
-        getWindow().setStatusBarColor(dim ? Color.TRANSPARENT :
-                    ContextCompat.getColor(this, getThemedResId(R.attr.colorPrimaryDark)));
+    private fun setStatusBarDim(dim: Boolean) {
+        window.statusBarColor = if (dim) Color.TRANSPARENT else ContextCompat.getColor(this, getThemedResId(android.R.attr.colorPrimaryDark))
     }
 
-    private int getThemedResId(@AttrRes int attr) {
-        TypedArray a = getTheme().obtainStyledAttributes(new int[]{attr});
-        int resId = a.getResourceId(0, 0);
-        a.recycle();
-        return resId;
+    private fun getThemedResId(@AttrRes attr: Int): Int {
+        val a = theme.obtainStyledAttributes(intArrayOf(attr))
+        val resId = a.getResourceId(0, 0)
+        a.recycle()
+        return resId
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finishAndRemoveTask();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finishAndRemoveTask()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
-
 }
