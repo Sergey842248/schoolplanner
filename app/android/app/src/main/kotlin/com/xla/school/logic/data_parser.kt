@@ -3,8 +3,16 @@ package com.xla.school.logic
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.xla.school.SettingsBase
-import com.xla.school.models.*
+
+import com.xla.school.models.Course
+import com.xla.school.models.Design
+import com.xla.school.models.Lesson
+import com.xla.school.models.Period
+import com.xla.school.models.Place
+import com.xla.school.models.SchoolTask
+import com.xla.school.models.Settings
+import com.xla.school.models.Teacher
+
 import java.lang.Exception
 
 
@@ -22,9 +30,9 @@ object DataParser{
     fun getSettings(context: Context): Settings {
 
         val timetableSettingsJson = database.mywidgettimetablesettings.getValue(context)
-        var base: SettingsBase? = null
+        var base: Settings? = null
         try{
-            base = gson.fromJson<SettingsBase>(timetableSettingsJson, SettingsBase::class.java)
+            base = gson.fromJson(timetableSettingsJson, Settings::class.java)
         }catch (e: Exception){
 
         }

@@ -7,9 +7,6 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven {
-            url (new File(rootProject.projectDir.parentFile, 'packages/flutter_tools/gradle/flutter_gradle_plugin_repository'))
-        }
     }
 }
 include ':app'
