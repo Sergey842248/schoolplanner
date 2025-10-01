@@ -11,7 +11,7 @@ plugins {
 
     android {
     namespace "com.xla.school"
-    compileSdkVersion 31
+    compileSdkVersion 34
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -95,8 +95,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.3.0'
     implementation 'com.google.firebase:firebase-dynamic-links:21.2.0'
     implementation 'com.google.firebase:firebase-messaging:23.4.0'
-    implementation 'com.google.firebase:firebase-performance:20.5.2'
-    implementation 'com.google.firebase:firebase-remote-config:21.6.0'
+    implementation 'com.google.firebase:firebase-perf:20.5.0'
+    implementation 'com.google.firebase:firebase-config:21.5.0'
     implementation 'com.google.firebase:firebase-storage:20.3.0'
     implementation 'com.google.firebase:firebase-functions:20.4.0'
 
