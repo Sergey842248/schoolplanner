@@ -30,7 +30,7 @@ plugins {
         versionCode 640
         versionName "11.7.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [applicationName:"io.flutter.app.FlutterApplication"]
+        manifestPlaceholders = [applicationName:"androidx.core.app.Application"]
     }
 
     compileOptions {
